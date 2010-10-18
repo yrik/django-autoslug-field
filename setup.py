@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'django-autoslug-field',
-    version = '0.1',
+    version = '0.1.1',
     description = "AutoSlugField for Django based on django-extensions AutoSlugField, adds option to track parent field for slug.",
     long_description = open('README.rst').read(),
     author = 'Aljosa Mohorovic',
