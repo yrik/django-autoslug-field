@@ -1,7 +1,8 @@
-from django.template.defaultfilters import slugify
-from django.db.models import SlugField
-import datetime
 import re
+import datetime
+from django.template.defaultfilters import slugify
+from django.db.models import SlugField, SubfieldBase
+from south.modelsinspector import add_introspection_rules
 
 class AutoSlugField(SlugField):
     """ AutoSlugField
@@ -30,6 +31,9 @@ class AutoSlugField(SlugField):
     Based on django-extensions, inspired by SmileyChris' Unique Slugify snippet:
     http://www.djangosnippets.org/snippets/690/
     """
+
+    __metaclass__ = SubfieldBase
+
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('blank', True)
         kwargs.setdefault('editable', False)
@@ -141,3 +145,12 @@ class AutoSlugField(SlugField):
 
     def get_internal_type(self):
         return "SlugField"
+
+add_introspection_rules(
+    [(
+        [AutoSlugField],
+        [],
+        {'populate_from': ["_populate_from", {}], 'recursive': ["recursive", {}]}
+    )],
+    ["^django_autoslug\.fields\.AutoSlugField"]
+)
