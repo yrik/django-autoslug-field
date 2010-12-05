@@ -23,7 +23,10 @@ class AutoSlugField(SlugField):
         If set to True, overwrites the slug on every save (default: False)
 
     recursive
-        If set, track field recursively and prepend to slug
+        If set, track callable/field recursively and prepend to slug
+    
+    use_recursive_slug
+        If set, when recursive is enabled it will prepend only slug from first recursive item
     
     prefix_from
         If set, prepend to slug
@@ -47,6 +50,7 @@ class AutoSlugField(SlugField):
         self.separator = kwargs.pop('separator',  u'-')
         self.overwrite = kwargs.pop('overwrite', False)
         self.recursive = kwargs.pop('recursive', False)
+        self.use_recursive_slug = kwargs.pop('use_recursive_slug', False)
         self.prefix_from = kwargs.pop('prefix_from', False)
         super(AutoSlugField, self).__init__(*args, **kwargs)
 
@@ -65,6 +69,9 @@ class AutoSlugField(SlugField):
     def slugify_func(self, content):
         return slugify(content)
 
+    def get_recursive_model(self, current_model):
+        pass
+
     def create_slug(self, model_instance, add):
         # get fields to populate from and slug field to set
         if not isinstance(self._populate_from, (list, tuple)):
@@ -80,6 +87,13 @@ class AutoSlugField(SlugField):
                     slug_for_field = lambda field: self.slugify_func(getattr(tmp, field))
                     L.append(self.separator.join(map(slug_for_field, self._populate_from)))
                     tmp = getattr(tmp, self.recursive)
+                    if callable(tmp):
+                        tmp = tmp()
+
+                    if self.use_recursive_slug and tmp != None:
+                        L.append(getattr(tmp, 'slug'))
+                        break
+
                 L.reverse()
                 slug = self.field_separator.join(L)
             else:
