@@ -69,9 +69,11 @@ class AutoSlugField(SlugField):
     def slugify_func(self, content):
         try:
             from pytils.translit import translify
-            return translify(content)
+            content = translify(content)
         except:
-            return slugify(content)
+            pass
+
+        return slugify(content)
 
     def get_recursive_model(self, current_model):
         pass
