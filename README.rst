@@ -7,7 +7,7 @@ AutoSlugField for Django based on django-extensions AutoSlugField, adds option t
 Installation
 =============
 
-Install django-autoslug-field like you would install any other pypi package::
+Install ``django-autoslug-field`` like you would install any other pypi package::
 
     pip install django-autoslug-field
 
@@ -15,8 +15,8 @@ Install django-autoslug-field like you would install any other pypi package::
 Configuration and usage
 ========================
 
-* add `django_autoslug` to the list of `INSTALLED_APPS` in your `settings.py`
-* use in `models.py`::
+* add ``django_autoslug`` to the list of ``INSTALLED_APPS`` in your ``settings.py``
+* use in ``models.py``::
 
     from django_autoslug.fields import AutoSlugField
 
@@ -28,4 +28,4 @@ Configuration and usage
         parent = models.ForeignKey('MyModel', blank=True, null=True)
         slug = AutoSlugField(populate_from=('title',), recursive='parent', prefix_from=('lang',), unique=True, max_length=255, overwrite=True)
 
-* install `http://pypi.python.org/pypi/pytils` if you need russian translit support
+* install ``http://pypi.python.org/pypi/pytils`` if you need russian translit support
