@@ -67,7 +67,11 @@ class AutoSlugField(SlugField):
         return re.sub(r'^%s+|%s+$' % (re_sep, re_sep), '', value)
 
     def slugify_func(self, content):
-        return slugify(content)
+        try:
+            from pytils.translit import translify
+            return translify(content)
+        except:
+            return slugify(content)
 
     def get_recursive_model(self, current_model):
         pass
