@@ -2,7 +2,7 @@ import re
 import datetime
 from django.template.defaultfilters import slugify
 from django.db.models import SlugField, SubfieldBase
-from south.modelsinspector import add_introspection_rules
+
 
 class AutoSlugField(SlugField):
     """ AutoSlugField
@@ -167,11 +167,17 @@ class AutoSlugField(SlugField):
     def get_internal_type(self):
         return "SlugField"
 
-add_introspection_rules(
-    [(
-        [AutoSlugField],
-        [],
-        {'populate_from': ["_populate_from", {}], 'recursive': ["recursive", {}]}
-    )],
-    ["^django_autoslug\.fields\.AutoSlugField"]
-)
+        
+try:
+    from south.modelsinspector import add_introspection_rules
+
+    add_introspection_rules(
+        [(
+            [AutoSlugField],
+            [],
+            {'populate_from': ["_populate_from", {}], 'recursive': ["recursive", {}]}
+        )],
+        ["^django_autoslug\.fields\.AutoSlugField"]
+    )
+except ImportError as e:
+    pass
