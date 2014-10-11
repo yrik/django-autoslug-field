@@ -167,6 +167,16 @@ class AutoSlugField(SlugField):
     def get_internal_type(self):
         return "SlugField"
 
+    def deconstruct(self):
+        name, path, args, kwargs = super(AutoSlugField, self).deconstruct()
+        kwargs.update({
+            'populate_from': repr(self._populate_from),
+            'separator': repr(self.separator),
+            'overwrite': repr(self.overwrite),
+            'allow_duplicates': repr(self.allow_duplicates),
+        })
+        return name, path, args, kwargs        
+
         
 try:
     from south.modelsinspector import add_introspection_rules
